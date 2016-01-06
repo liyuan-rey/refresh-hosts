@@ -1,0 +1,26 @@
+{
+  "name": "refresh-hosts",
+  "version": "1.0.0",
+  "description": "A tool that update windows hosts file for resolving the hostname which blocked by Chinese GFW.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liyuan-rey/refresh-hosts.git"
+  },
+  "keywords": [
+    "hosts",
+    "gfw"
+  ],
+  "author": "liyuan-rey",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/liyuan-rey/refresh-hosts/issues"
+  },
+  "homepage": "https://github.com/liyuan-rey/refresh-hosts#readme",
+  "dependencies": {
+    "q": "^1.4.1"
+  }
+}
