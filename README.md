@@ -1,5 +1,6 @@
 # refresh-hosts
-A tool that update windows hosts file for resolving the hostname correctlly which blocked by Chinese GFW.
+A tool that update windows hosts file for resolving the hostname correctlly which blocked by Chinese GFW,  
+based on [https://github.com/racaljk/hosts](https://github.com/racaljk/hosts).
 
 ## Usage
 
