@@ -6,8 +6,8 @@ process.on('uncaughtException', uncaughtException);
 var path = require('path');
 var Q = require('q');
 var fs = require('fs');
-// var https = require('https');
-var https = require('http');
+var https = require('https');
+// var https = require('http'); // for test only
 var zlib = require('zlib');
 var exec = require('child_process').exec;
 
@@ -25,13 +25,13 @@ checkEnvironment()
         console.error('promise error: ' + err);
     })
     .done(function () {
+        if (errcode === 0) {
+            console.log('Hosts file and dns cache update successfully.');
+        }
+        
         process.exit(errcode);
     });
 
-
-// getHostFile(tmpfile);
-// replaceSysHostFile(tmpfile);
-// flushDns()
 
 //////////
 
@@ -82,12 +82,12 @@ function getHostFile() {
     var deffered = Q.defer();
     
     var options = {
-            // hostname: 'raw.githubusercontent.com',
-            // port: 443,
-            // path: '/racaljk/hosts/master/hosts',
-            hostname: '127.0.0.1',
-            port: 80,
-            path: '/',
+            hostname: 'raw.githubusercontent.com',
+            port: 443,
+            path: '/racaljk/hosts/master/hosts',
+            // hostname: '127.0.0.1', // for test only
+            // port: 80,
+            // path: '/',
             method: 'GET',
             headers: { 'accept-encoding': 'gzip, deflate' }
     };
@@ -95,23 +95,27 @@ function getHostFile() {
     var request = https.request(options);
     request.on('response', function (response) {
         var output = fs.createWriteStream(tmpfile);
-        
+
+        var tmp;
         switch (response.headers['content-encoding']) {
             case 'gzip':
-                response.pipe(zlib.createGunzip()).pipe(output);
+                tmp = response.pipe(zlib.createGunzip());
                 break;
             case 'deflate':
-                response.pipe(zlib.createInflate()).pipe(output);
+                tmp = response.pipe(zlib.createInflate());
                 break;
             default:
-                response.pipe(output);
+                tmp = response;
                 break;
         }
         
-        output.end();
-        
-        console.log('    done.');
-        deffered.resolve();
+        tmp.pipe(output);
+        tmp.on('close', function () {
+            output.end();
+            
+            console.log('    done.');
+            deffered.resolve();
+        });
     });
 
     request.on('error', function(err) {
@@ -129,7 +133,7 @@ function replaceSysHostFile() {
     var deffered = Q.defer();
     
     var sysfile = path.join(
-            // process.env.SystemRoot,
+            // process.env.SystemRoot, //todo: check why can't get env variables
             'C:/WINDOWS',
             'System32',
             'drivers',
@@ -137,7 +141,7 @@ function replaceSysHostFile() {
             'hosts'
     );
 
-    fs.rename(tmpfile, 'c:/hosts', function (err) {
+    fs.rename(tmpfile, sysfile, function (err) {
         if (err !== null) {
             errcode = 4;
             console.error('    error: ' + err);
