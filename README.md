@@ -1,14 +1,14 @@
 # refresh-hosts
-A tool that update windows hosts file for resolving the hostname which blocked by Chinese GFW.
+A tool that update windows hosts file for resolving the hostname correctlly which blocked by Chinese GFW.
 
 ## Usage
 
 Notes:
 This tool only works in win32 for now.
 
-* pull the code from github and run in node
+* pull the code from github and run in nodejs
   
-  In win32 command prompt(wit git and node installed):
+  In win32 command prompt (run as `administrator`):
   ```cmd
   %HOMEDRIVE%
   cd %HOMEPATH%
@@ -19,3 +19,5 @@ This tool only works in win32 for now.
   npm install
   node index.js
   ```
+
+You may need [git](https://git-for-windows.github.io/) and [nodejs](https://nodejs.org/) installed first.
